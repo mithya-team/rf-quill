@@ -169,12 +169,7 @@ const RichTextEditor: FC<RichTextEditorProps> = (props) => {
         className={classes.rte}
         value={value}
         onChange={(data) => {
-          console.log({ data });
-          console.count('onChange')
-          formikProps?.setFieldValue(
-            fieldConfig?.valueKey || "",
-data
-          );
+          formikProps?.setFieldValue(fieldConfig?.valueKey || "", data);
         }}
         {...restFieldProps}
       />
