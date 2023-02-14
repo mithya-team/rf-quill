@@ -75,31 +75,9 @@ const RichTextEditor: FC<RichTextEditorProps> = (props) => {
   const value = _.get(formikProps, `values.${name}`) || "";
   const errorText = getFieldError(name, formikProps);
 
-  const showColorPicker = (value: any) => {
+  const handleColorChange = (color: string) => {
     const quill = quillRef.current?.getEditor();
-    console.log(quill);
-    if (value === "color-picker") {
-      var picker = document.getElementById("color-picker") as HTMLInputElement;
-      if (!picker) {
-        picker = document.createElement("input");
-        picker.id = "color-picker";
-        picker.type = "color";
-        picker.style.display = "none";
-        picker.value = "#FF0000";
-        document.body.appendChild(picker);
-
-        picker.addEventListener(
-          "change",
-          function () {
-            quill?.format("color", picker.value);
-          },
-          false
-        );
-      }
-      picker.click();
-    } else {
-      quill?.format("color", value);
-    }
+    quill?.format("color", color);
   };
 
   function imageHandler() {
@@ -139,7 +117,6 @@ const RichTextEditor: FC<RichTextEditorProps> = (props) => {
   useEffect(() => {
     const quill = quillRef.current?.getEditor();
     var toolbar = quill?.getModule("toolbar");
-    toolbar.addHandler("color", showColorPicker);
     if (fieldProps.customImageUploadAdapter)
       toolbar.addHandler("image", imageHandler);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -161,7 +138,12 @@ const RichTextEditor: FC<RichTextEditorProps> = (props) => {
       <InputLabel {...labelProps} error={!!errorText}>
         {label}
       </InputLabel>
-      <QuillToolbar {...toolbarProps} customSizes={sizes} id={toolbarId} />
+      <QuillToolbar
+        handleColorChange={handleColorChange}
+        {...toolbarProps}
+        customSizes={sizes}
+        id={toolbarId}
+      />
       <ReactQuill
         ref={(ref) => {
           quillRef.current = ref;

@@ -5,6 +5,7 @@ import { QuillFontSizeOption } from "./RFReactQuill";
 type ToolbarOption = "size" | "color" | "image" | "align" | "indents" | "lists";
 export interface QuillToolbarProps {
   id: string;
+  handleColorChange: (color: string) => void;
   // variant?: 'headings' | 'size';
   toolbarOptions?: ToolbarOption[];
   customSizes?: QuillFontSizeOption[];
@@ -16,6 +17,7 @@ const QuillToolbar: React.FC<QuillToolbarProps> = (props) => {
     toolbarOptions = ["align", "color", "image", "size", "indents", "lists"],
     customSizes,
     formats,
+    handleColorChange,
   } = props;
 
   return (
@@ -32,7 +34,9 @@ const QuillToolbar: React.FC<QuillToolbarProps> = (props) => {
                 );
               })
             : Formatting}
-          {toolbarOptions.includes("color") && Color}
+          {toolbarOptions.includes("color") ? (
+            <Color handleColorChange={handleColorChange} />
+          ) : null}
         </span>
         {toolbarOptions.includes("image") && Image}
         {toolbarOptions.includes("align") && Align}
@@ -45,7 +49,14 @@ const QuillToolbar: React.FC<QuillToolbarProps> = (props) => {
 
 const Image = <button className="ql-image"></button>;
 
-const Color = <input id="color" type="color" className="ql-color" />;
+const Color: React.FC<{ handleColorChange: (color: string) => void }> = ({
+  handleColorChange,
+}) => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    handleColorChange(e.target.value);
+  };
+  return <input onChange={onChange} type="color" className="ql-color" />;
+};
 
 const getCustomSizeOptions = (customSizes: QuillFontSizeOption[]) => {
   if (!customSizes.length) {

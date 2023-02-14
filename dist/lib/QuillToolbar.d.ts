@@ -3,6 +3,7 @@ import { QuillFontSizeOption } from "./RFReactQuill";
 declare type ToolbarOption = "size" | "color" | "image" | "align" | "indents" | "lists";
 export interface QuillToolbarProps {
     id: string;
+    handleColorChange: (color: string) => void;
     toolbarOptions?: ToolbarOption[];
     customSizes?: QuillFontSizeOption[];
     formats?: QuillFormat[];

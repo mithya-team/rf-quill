@@ -92,7 +92,7 @@ function __generator(thisArg, body) {
 var DEFAULT_FONT_SIZE = "16px";
 
 var QuillToolbar = function (props) {
-    var _a = props.toolbarOptions, toolbarOptions = _a === void 0 ? ["align", "color", "image", "size", "indents", "lists"] : _a, customSizes = props.customSizes, formats = props.formats;
+    var _a = props.toolbarOptions, toolbarOptions = _a === void 0 ? ["align", "color", "image", "size", "indents", "lists"] : _a, customSizes = props.customSizes, formats = props.formats, handleColorChange = props.handleColorChange;
     return (React__default.createElement(React__default.Fragment, null,
         React__default.createElement("div", { id: props.id },
             toolbarOptions.includes("size") && customSizes
@@ -104,14 +104,20 @@ var QuillToolbar = function (props) {
                         return (React__default.createElement("button", { key: format, className: "ql-" + format }));
                     })
                     : Formatting,
-                toolbarOptions.includes("color") && Color),
+                toolbarOptions.includes("color") ? (React__default.createElement(Color, { handleColorChange: handleColorChange })) : null),
             toolbarOptions.includes("image") && Image,
             toolbarOptions.includes("align") && Align,
             toolbarOptions.includes("indents") && Indents,
             toolbarOptions.includes("lists") && Lists)));
 };
 var Image = React__default.createElement("button", { className: "ql-image" });
-var Color = React__default.createElement("input", { id: "color", type: "color", className: "ql-color" });
+var Color = function (_a) {
+    var handleColorChange = _a.handleColorChange;
+    var onChange = function (e) {
+        handleColorChange(e.target.value);
+    };
+    return React__default.createElement("input", { onChange: onChange, type: "color", className: "ql-color" });
+};
 var getCustomSizeOptions = function (customSizes) {
     if (!customSizes.length) {
         return null;
@@ -164,28 +170,10 @@ var RichTextEditor = function (props) {
     var quillRef = React.useRef(null);
     var value = _.get(formikProps, "values." + name) || "";
     var errorText = reactForms.getFieldError(name, formikProps);
-    var showColorPicker = function (value) {
+    var handleColorChange = function (color) {
         var _a;
         var quill = (_a = quillRef.current) === null || _a === void 0 ? void 0 : _a.getEditor();
-        console.log(quill);
-        if (value === "color-picker") {
-            var picker = document.getElementById("color-picker");
-            if (!picker) {
-                picker = document.createElement("input");
-                picker.id = "color-picker";
-                picker.type = "color";
-                picker.style.display = "none";
-                picker.value = "#FF0000";
-                document.body.appendChild(picker);
-                picker.addEventListener("change", function () {
-                    quill === null || quill === void 0 ? void 0 : quill.format("color", picker.value);
-                }, false);
-            }
-            picker.click();
-        }
-        else {
-            quill === null || quill === void 0 ? void 0 : quill.format("color", value);
-        }
+        quill === null || quill === void 0 ? void 0 : quill.format("color", color);
     };
     function imageHandler() {
         var input = document.createElement("input");
@@ -234,7 +222,6 @@ var RichTextEditor = function (props) {
         var _a;
         var quill = (_a = quillRef.current) === null || _a === void 0 ? void 0 : _a.getEditor();
         var toolbar = quill === null || quill === void 0 ? void 0 : quill.getModule("toolbar");
-        toolbar.addHandler("color", showColorPicker);
         if (fieldProps.customImageUploadAdapter)
             toolbar.addHandler("image", imageHandler);
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -248,7 +235,7 @@ var RichTextEditor = function (props) {
     // https://stackoverflow.com/a/12502559/10032950
     return (React__default.createElement(React__default.Fragment, null,
         React__default.createElement(core.InputLabel, __assign({}, labelProps, { error: !!errorText }), label),
-        React__default.createElement(QuillToolbar, __assign({}, toolbarProps, { customSizes: sizes, id: toolbarId })),
+        React__default.createElement(QuillToolbar, __assign({ handleColorChange: handleColorChange }, toolbarProps, { customSizes: sizes, id: toolbarId })),
         React__default.createElement(ReactQuill__default, __assign({ ref: function (ref) {
                 quillRef.current = ref;
             }, modules: getQuillModule(toolbarId), className: classes.rte, value: value, onChange: function (data) {
