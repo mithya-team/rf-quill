@@ -77,6 +77,7 @@ const RichTextEditor: FC<RichTextEditorProps> = (props) => {
 
   const showColorPicker = (value: any) => {
     const quill = quillRef.current?.getEditor();
+    console.log(quill);
     if (value === "color-picker") {
       var picker = document.getElementById("color-picker") as HTMLInputElement;
       if (!picker) {

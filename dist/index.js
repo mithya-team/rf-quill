@@ -167,6 +167,7 @@ var RichTextEditor = function (props) {
     var showColorPicker = function (value) {
         var _a;
         var quill = (_a = quillRef.current) === null || _a === void 0 ? void 0 : _a.getEditor();
+        console.log(quill);
         if (value === "color-picker") {
             var picker = document.getElementById("color-picker");
             if (!picker) {
@@ -251,8 +252,6 @@ var RichTextEditor = function (props) {
         React__default.createElement(ReactQuill__default, __assign({ ref: function (ref) {
                 quillRef.current = ref;
             }, modules: getQuillModule(toolbarId), className: classes.rte, value: value, onChange: function (data) {
-                console.log({ data: data });
-                console.count('onChange');
                 formikProps === null || formikProps === void 0 ? void 0 : formikProps.setFieldValue((fieldConfig === null || fieldConfig === void 0 ? void 0 : fieldConfig.valueKey) || "", data);
             } }, restFieldProps)),
         React__default.createElement(core.FormHelperText, __assign({}, helperTextProps, { error: !!errorText }),
