@@ -6,7 +6,7 @@ import clsx from "clsx";
 import React from "react";
 
 export interface RichTextEditorFieldProps extends EditorProps {
-  name?: string;
+  name: string;
   label?: string;
   helperText?: string;
 }
@@ -34,3 +34,6 @@ export const RichTextEditor: FC<RichTextEditorProps> = (props) => {
 };
 
 export default RichTextEditor;
+
+import { attachField } from "react-forms-lite";
+attachField("rte-quill", <RichTextEditor />);

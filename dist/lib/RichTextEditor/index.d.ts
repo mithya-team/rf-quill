@@ -2,7 +2,7 @@ import { FC } from "react";
 import { FieldProps } from "react-forms-lite";
 import { EditorProps } from "@mithya-team/rich-text-editor";
 export interface RichTextEditorFieldProps extends EditorProps {
-    name?: string;
+    name: string;
     label?: string;
     helperText?: string;
 }
