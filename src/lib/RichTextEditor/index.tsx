@@ -3,7 +3,7 @@ import { FC } from "react";
 import { FieldProps, HelperText } from "react-forms-lite";
 import { Editor, EditorProps } from "@mithya-team/rich-text-editor";
 import clsx from "clsx";
-import "./index.css";
+import React from "react";
 
 export interface RichTextEditorFieldProps extends EditorProps {
   name?: string;
@@ -15,7 +15,7 @@ export interface RichTextEditorProps extends FieldProps {
   fieldProps?: RichTextEditorFieldProps;
 }
 
-const RichTextEditor: FC<RichTextEditorProps> = (props) => {
+export const RichTextEditor: FC<RichTextEditorProps> = (props) => {
   const {
     formikProps = {} as FormikProps<unknown>,
     fieldProps = {} as RichTextEditorFieldProps,

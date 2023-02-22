@@ -1,7 +1,7 @@
 import { Formik } from "formik";
-import "./App.css";
-import RichTextEditor from "./RichTextEditor";
+import RichTextEditor from "./lib/RichTextEditor";
 import { FormConfig } from "react-forms-lite";
+import React from "react";
 
 const myFieldConfig: FormConfig = {
   type: "rte-quill",
