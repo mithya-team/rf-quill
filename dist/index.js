@@ -38682,8 +38682,7 @@ var RichTextEditor = function (props) {
         React.createElement(HelperText, { fieldProps: fieldProps, formikProps: formikProps })));
 };
 
-var rteElement = React.createElement(RichTextEditor, {});
-attachField("rte-quill", rteElement);
+attachField("rte-quill", React.createElement(RichTextEditor, null));
 
 exports.RichTextEditor = RichTextEditor;
 //# sourceMappingURL=index.js.map
