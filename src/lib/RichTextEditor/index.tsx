@@ -34,6 +34,3 @@ export const RichTextEditor: FC<RichTextEditorProps> = (props) => {
 };
 
 export default RichTextEditor;
-
-import { attachField } from "react-forms-lite";
-attachField("rte-quill", <RichTextEditor />);
