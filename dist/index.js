@@ -21286,6 +21286,44 @@ attachField("password", React.createElement(TextField, null), { type: "password"
 attachField("text", React.createElement(TextField, null), { type: "text" });
 attachField("plaintext", React.createElement(PlainText, null));
 
+/*! *****************************************************************************
+Copyright (c) Microsoft Corporation. All rights reserved.
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+this file except in compliance with the License. You may obtain a copy of the
+License at http://www.apache.org/licenses/LICENSE-2.0
+
+THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
+WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
+MERCHANTABLITY OR NON-INFRINGEMENT.
+
+See the Apache Version 2.0 License for specific language governing permissions
+and limitations under the License.
+***************************************************************************** */
+
+var __assign$1 = function() {
+    __assign$1 = Object.assign || function __assign(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign$1.apply(this, arguments);
+};
+
+function __rest(s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+}
+
 var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
 /**
@@ -38673,13 +38711,120 @@ const Editor = ({ quillProps = null, imageUploader = null, ImageUploadHandler = 
 
 function r(e){var t,f,n="";if("string"==typeof e||"number"==typeof e)n+=e;else if("object"==typeof e)if(Array.isArray(e))for(t=0;t<e.length;t++)e[t]&&(f=r(e[t]))&&(n&&(n+=" "),n+=f);else for(t in e)e[t]&&(n&&(n+=" "),n+=t);return n}function clsx(){for(var e,t,f=0,n="";f<arguments.length;)(e=arguments[f++])&&(t=r(e))&&(n&&(n+=" "),n+=t);return n}
 
+var DEFAULT_FONT_SIZE = "16px";
+
+var QuillToolbar = function (props) {
+    var _a = props.toolbarOptions, toolbarOptions = _a === void 0 ? ["align", "color", "image", "size", "indents", "lists"] : _a, customSizes = props.customSizes, formats = props.formats, handleColorChange = props.handleColorChange;
+    return (React.createElement(React.Fragment, null,
+        React.createElement("div", { id: props.id },
+            toolbarOptions.includes("size") && customSizes
+                ? getCustomSizeOptions(customSizes)
+                : Size,
+            React.createElement("span", { className: "ql-formats" },
+                formats
+                    ? formats.map(function (format) {
+                        return (React.createElement("button", { key: format, className: "ql-".concat(format) }));
+                    })
+                    : Formatting,
+                toolbarOptions.includes("color") ? (React.createElement(Color, { handleColorChange: handleColorChange })) : null),
+            toolbarOptions.includes("image") && Image,
+            toolbarOptions.includes("align") && Align,
+            toolbarOptions.includes("indents") && Indents,
+            toolbarOptions.includes("lists") && Lists)));
+};
+var Image = React.createElement("button", { className: "ql-image" });
+var Color = function (_a) {
+    var handleColorChange = _a.handleColorChange;
+    var onChange = function (e) {
+        handleColorChange(e.target.value);
+    };
+    return React.createElement("input", { onChange: onChange, type: "color", className: "ql-color" });
+};
+var getCustomSizeOptions = function (customSizes) {
+    if (!customSizes.length) {
+        return null;
+    }
+    return (React.createElement("select", { className: "ql-size" }, customSizes.map(function (size, index) { return (React.createElement("option", { style: { fontSize: size.value }, key: size.value, selected: index === 0, value: size.value },
+        size.label,
+        " (",
+        size.value,
+        ")")); })));
+};
+var defaultFormats = ["bold", "italic", "underline", "link"];
+var Size = (React.createElement("select", { className: "ql-size", defaultValue: "".concat(DEFAULT_FONT_SIZE) },
+    React.createElement("option", { value: "34px" }, "Heading 1 (34px) "),
+    React.createElement("option", { value: "24px" }, "Heading 2 (24px) "),
+    React.createElement("option", { value: "20px" }, "Heading 3 (20px) "),
+    React.createElement("option", { value: "16px" }, "Body 1 (16px) "),
+    React.createElement("option", { value: "14px" }, "Body 2 (14px) "),
+    React.createElement("option", { value: "11px" }, "Body 3 (11px) ")));
+var Lists = (React.createElement("span", { className: "ql-formats" },
+    React.createElement("button", { className: "ql-list", value: "ordered" }),
+    React.createElement("button", { className: "ql-list", value: "bullet" })));
+var Indents = (React.createElement("span", { className: "ql-formats" },
+    React.createElement("button", { className: "ql-indent", value: "-1" }),
+    React.createElement("button", { className: "ql-indent", value: "+1" })));
+var Formatting = (React.createElement(React.Fragment, null, defaultFormats.map(function (format) { return (React.createElement("button", { key: format, className: "ql-".concat(format) })); })));
+var Align = (React.createElement("span", { className: "ql-formats" },
+    React.createElement("button", { className: "ql-direction", value: "rtl" }),
+    React.createElement("select", { className: "ql-align" })));
+
 var RichTextEditor = function (props) {
-    var _a = props.formikProps, formikProps = _a === void 0 ? {} : _a, _b = props.fieldProps, fieldProps = _b === void 0 ? {} : _b;
-    var label = fieldProps.label, name = fieldProps.name, className = fieldProps.className;
+    var 
+    // fieldConfig,
+    // formikProps = {} as FormikProps<unknown>,
+    _a = props.fieldProps, 
+    // fieldConfig,
+    // formikProps = {} as FormikProps<unknown>,
+    fieldProps = _a === void 0 ? {} : _a;
+    var label = fieldProps.label, helperText = fieldProps.helperText, sizes = fieldProps.sizes, className = fieldProps.className, _b = fieldProps.toolbarProps, toolbarProps = _b === void 0 ? {} : _b, name = fieldProps.name, restFieldProps = __rest(fieldProps, ["label", "helperText", "sizes", "className", "toolbarProps", "name"]);
+    React.useEffect(function () {
+        var Size = lib.Quill.import("attributors/style/size");
+        Size.whitelist = (sizes === null || sizes === void 0 ? void 0 : sizes.map(function (size) { return size.value; })) || [
+            "11px",
+            "14px",
+            "16px",
+            "20px",
+            "24px",
+            "34px",
+        ];
+        lib.Quill.register(Size, true);
+    }, [sizes]);
+    var quillRef = React.useRef(null);
+    // const value = _.get(formikProps, `values.${name}`) || "";
+    var handleColorChange = function (color) {
+        var _a;
+        var quill = (_a = quillRef.current) === null || _a === void 0 ? void 0 : _a.getEditor();
+        quill === null || quill === void 0 ? void 0 : quill.format("color", color);
+    };
+    var toolbarId = React.useMemo(function () { return ({
+        toolbarId: (name + Math.random().toString(36)).replace(/[^\w]/gi, ""),
+    }); }, [name]).toolbarId;
+    // const options = [
+    //   ToolbarOptions.fontStyle,
+    //   ToolbarOptions.quoteCode,
+    //   ToolbarOptions.headers,
+    //   ToolbarOptions.list,
+    //   ToolbarOptions.indentation,
+    //   ToolbarOptions.font,
+    //   ToolbarOptions.script,
+    //   ToolbarOptions.align,
+    //   ToolbarOptions.clear,
+    // ];
     return (React.createElement("div", { className: clsx("field-container", className) },
         label && React.createElement("span", { className: "field-label" }, label),
-        React.createElement(Editor, { className: "".concat(name, "_").concat(className) }),
-        React.createElement(HelperText, { fieldProps: fieldProps, formikProps: formikProps })));
+        React.createElement(QuillToolbar, __assign$1({ handleColorChange: handleColorChange }, toolbarProps, { customSizes: sizes, id: toolbarId })),
+        React.createElement(Editor, __assign$1({ className: "".concat(name, "-").concat(className), 
+            // value={value}
+            // onChange={(data) => {
+            //   formikProps?.setFieldValue(fieldConfig?.valueKey || "", data);
+            // }}
+            quillProps: {
+                modules: {
+                    toolbar: "#".concat(toolbarId),
+                },
+            } }, restFieldProps)),
+        helperText && React.createElement("span", { className: "helper-text" }, helperText)));
 };
 
 attachField("rte-quill", React.createElement(RichTextEditor, null));
